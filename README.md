@@ -1,4 +1,4 @@
-# humor-tracker
+# humor-tracker.
 
 ## Project setup
 ```

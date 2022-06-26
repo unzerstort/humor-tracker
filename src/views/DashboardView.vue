@@ -25,36 +25,61 @@
         <v-form @submit.prevent="registrarMomento">
           <v-card outlined>
             <v-card-text>
-              <v-text-field
-                label="Humor nome"
-                name="humorNome"
-                v-model="formularioMomento.humor.nome"
-              ></v-text-field>
-              <v-text-field
-                label="Humor cor"
-                name="humorCor"
-                v-model="formularioMomento.humor.cor"
-              ></v-text-field>
-              <v-text-field
-                label="Humor icone"
-                name="humorIcone"
-                v-model="formularioMomento.humor.icone"
-              ></v-text-field>
-              <v-text-field
-                label="Atividade nome"
-                name="atividadeNome"
-                v-model="formularioMomento.atividade.nome"
-              ></v-text-field>
-              <v-text-field
-                label="Atividade icone"
-                name="atividadeIcone"
-                v-model="formularioMomento.atividade.icone"
-              ></v-text-field>
-              <v-text-field
-                label="Anotacao"
-                name="anotacao"
-                v-model="formularioMomento.anotacao"
-              ></v-text-field>
+              <div>
+                <v-text-field
+                  label="Humor nome"
+                  name="humorNome"
+                  v-model="formularioMomento.humor.nome"
+                ></v-text-field>
+                <v-text-field
+                  label="Humor cor"
+                  name="humorCor"
+                  v-model="formularioMomento.humor.cor"
+                ></v-text-field>
+                <v-text-field
+                  label="Humor icone"
+                  name="humorIcone"
+                  v-model="formularioMomento.humor.icone"
+                ></v-text-field>
+              </div>
+
+              <div>
+                <v-chip-group
+                  active-class="primary--text"
+                  column
+                  v-model="formularioMomento.atividade"
+                >
+                  <v-chip 
+                    v-for="atividade in atividades"
+                    :key="atividade.id"
+                    label
+                    :value="atividade"
+                  >
+                    <v-icon left>
+                      {{ atividade.icone }}
+                    </v-icon>
+                    {{ atividade.nome }}
+                  </v-chip>
+                </v-chip-group>
+
+                <v-text-field
+                  label="Atividade nome"
+                  name="atividadeNome"
+                  v-model="formularioMomento.atividade.nome"
+                ></v-text-field>
+                <v-text-field
+                  label="Atividade icone"
+                  name="atividadeIcone"
+                  v-model="formularioMomento.atividade.icone"
+                ></v-text-field>
+              </div>
+              <div>
+                <v-text-field
+                  label="Anotacao"
+                  name="anotacao"
+                  v-model="formularioMomento.anotacao"
+                ></v-text-field>  
+              </div>
             </v-card-text>
 
             <v-card-actions class="justify-content-center">
@@ -200,7 +225,14 @@ export default {
         icone: ''
       },
       anotacao: ''
-    }
+    },
+
+    atividades: [
+      {id: 0, nome: "Trabalho", icone: "mdi-briefcase"},
+      {id: 1, nome: "Casa", icone: "mdi-home"},
+      {id: 2, nome: "Universidade", icone: "mdi-school"},
+      {id: 3, nome: "Atividade física", icone: "mdi-weight-lifter"},
+    ],
   }),
 
   methods: {
@@ -208,7 +240,6 @@ export default {
       console.log(this.formularioMomento);
       this.formularioMomento.dataHora = new Date();
 
-      debugger
       const cartaoDiarioCorrespondente = this.cartoesDiarios.find(cartao => {
         return this.formularioMomento.dataHora.getFullYear() == cartao.dataDia.getFullYear()
           && this.formularioMomento.dataHora.getMonth() == cartao.dataDia.getMonth()

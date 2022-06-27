@@ -22,90 +22,96 @@
 
     <v-main class="bg-grey">
       <v-container>
-        <v-form @submit.prevent="registrarMomento" ref="form">
-          <v-card outlined>
-            <v-card-text>
-              <v-btn-toggle 
-                v-model="formularioMomento.humor"
-                class="d-flex justify-content-space-around"
-              > 
-                <div 
-                  v-for="humor in humores"
-                  :key="humor.id"
-                  class="d-flex flex-direction-column align-items-center"
-                >
-                  <v-btn
-                    icon
-                    :color="humor.cor"
-                    :value="humor"
-                    x-large
+        <v-row class="justify-content-center" no-gutters>
+          <v-card width="600px">
+            <v-form @submit.prevent="registrarMomento">
+              <v-card-text>
+                <label class="font-weight-bold">Selecione um humor:</label>
+                <v-btn-toggle 
+                  v-model="formularioMomento.humor"
+                  class="d-flex justify-content-space-around"
+                > 
+                  <div 
+                    v-for="humor in humores"
+                    :key="humor.id"
+                    class="d-flex flex-direction-column align-items-center"
                   >
-                    <v-icon x-large>{{ humor.icone }}</v-icon>
-                  </v-btn>
-                  <div>
-                    {{ humor.nome }}
+                    <v-btn
+                      icon
+                      :color="humor.cor"
+                      :value="humor"
+                      x-large
+                    >
+                      <v-icon x-large>{{ humor.icone }}</v-icon>
+                    </v-btn>
+                    <div>
+                      {{ humor.nome }}
+                    </div>
                   </div>
-                </div>
-              </v-btn-toggle>
+                </v-btn-toggle>
 
-              <div>
-                <v-chip-group
-                  active-class="primary--text"
-                  column
-                  v-model="formularioMomento.atividade"
-                >
-                  <v-chip 
-                    v-for="atividade in atividades"
-                    :key="atividade.id"
-                    label
-                    :value="atividade"
+                <div class="mt-5">
+                  <label class="font-weight-bold">Selecione uma atividade:</label>
+                  <v-chip-group
+                    active-class="primary--text"
+                    column
+                    v-model="formularioMomento.atividade"
                   >
-                    <v-icon left>
-                      {{ atividade.icone }}
-                    </v-icon>
-                    {{ atividade.nome }}
-                  </v-chip>
-                </v-chip-group>
-              </div>
-              <div>
-                <v-text-field
-                  label="Anotacao"
-                  name="anotacao"
-                  v-model="formularioMomento.anotacao"
-                ></v-text-field>  
-              </div>
-            </v-card-text>
+                    <v-chip 
+                      v-for="atividade in atividades"
+                      :key="atividade.id"
+                      label
+                      :value="atividade"
+                    >
+                      <v-icon left>
+                        {{ atividade.icone }}
+                      </v-icon>
+                      {{ atividade.nome }}
+                    </v-chip>
+                  </v-chip-group>
+                </div>
+                <div class="mt-5">
+                  <v-text-field
+                    label="Nota"
+                    name="anotacao"
+                    v-model="formularioMomento.anotacao"
+                    outlined
+                    dense
+                  ></v-text-field>  
+                </div>
+              </v-card-text>
 
-            <v-card-actions class="justify-content-center">
-              <v-btn color="primary" depressed type="submit">Submeter</v-btn>
-            </v-card-actions>
+              <v-card-actions class="justify-content-end">
+                <v-btn color="primary" depressed type="submit">Adicionar</v-btn>
+              </v-card-actions>
+            </v-form>
           </v-card>
-        </v-form>
-      </v-container>
-      <v-container>
-        <v-card 
-          v-for="cartao in cartoesDiarios"
-          :key="cartao.id"
-          class="cartao-diario mb-3" 
-          min-width="400"
-        >
-          <v-sheet :color="cartao.cor">
-            <v-card-title class="cartao-diario__titulo"> {{ cartao.dataDia }} </v-card-title>
-          </v-sheet>
-          <v-card-text>
-            <v-timeline dense>
-              <v-timeline-item 
-                v-for="momento in cartao.momentos"
-                :key="momento.id"
-                :icon="momento.humor.icone" 
-                :color="momento.humor.cor"
-              >
-                <div>{{ momento.humor.nome }} <small>{{ momento.dataHora }}</small></div>
-                <div>{{ momento.atividade.nome }}</div>
-              </v-timeline-item>
-            </v-timeline>
-          </v-card-text>
-        </v-card>
+        </v-row>
+        <v-row class="justify-content-center" no-gutters>
+          <v-card width="600px" 
+            v-for="cartao in cartoesDiarios"
+            :key="cartao.id"
+            class="cartao-diario mt-3" 
+            min-width="400"
+          >
+            <v-sheet :color="cartao.cor">
+              <v-card-title class="cartao-diario__titulo"> {{ cartao.dataDia }} </v-card-title>
+            </v-sheet>
+            <v-card-text>
+              <v-timeline dense>
+                <v-timeline-item 
+                  v-for="momento in cartao.momentos"
+                  :key="momento.id"
+                  :icon="momento.humor.icone" 
+                  :color="momento.humor.cor"
+                >
+                  <div>{{ momento.humor.nome }} <small>{{ momento.dataHora }}</small></div>
+                  <div>{{ momento.atividade.nome }}</div>
+                </v-timeline-item>
+              </v-timeline>
+            </v-card-text>
+          </v-card>
+        </v-row>
       </v-container>
     </v-main>
   </v-app>
@@ -120,7 +126,7 @@ export default {
 
   data: () => ({
     cards: ["Today", "Yesterday"],
-    drawer: false,
+    drawer: true,
     links: [
       ["mdi-pencil", "Registros"],
       ["mdi-chart-bar", "Estatísticas"],

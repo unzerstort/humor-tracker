@@ -22,26 +22,31 @@
 
     <v-main class="bg-grey">
       <v-container>
-        <v-form @submit.prevent="registrarMomento">
+        <v-form @submit.prevent="registrarMomento" ref="form">
           <v-card outlined>
             <v-card-text>
-              <div>
-                <v-text-field
-                  label="Humor nome"
-                  name="humorNome"
-                  v-model="formularioMomento.humor.nome"
-                ></v-text-field>
-                <v-text-field
-                  label="Humor cor"
-                  name="humorCor"
-                  v-model="formularioMomento.humor.cor"
-                ></v-text-field>
-                <v-text-field
-                  label="Humor icone"
-                  name="humorIcone"
-                  v-model="formularioMomento.humor.icone"
-                ></v-text-field>
-              </div>
+              <v-btn-toggle 
+                v-model="formularioMomento.humor"
+                class="d-flex justify-content-space-around"
+              > 
+                <div 
+                  v-for="humor in humores"
+                  :key="humor.id"
+                  class="d-flex flex-direction-column align-items-center"
+                >
+                  <v-btn
+                    icon
+                    :color="humor.cor"
+                    :value="humor"
+                    x-large
+                  >
+                    <v-icon x-large>{{ humor.icone }}</v-icon>
+                  </v-btn>
+                  <div>
+                    {{ humor.nome }}
+                  </div>
+                </div>
+              </v-btn-toggle>
 
               <div>
                 <v-chip-group
@@ -61,17 +66,6 @@
                     {{ atividade.nome }}
                   </v-chip>
                 </v-chip-group>
-
-                <v-text-field
-                  label="Atividade nome"
-                  name="atividadeNome"
-                  v-model="formularioMomento.atividade.nome"
-                ></v-text-field>
-                <v-text-field
-                  label="Atividade icone"
-                  name="atividadeIcone"
-                  v-model="formularioMomento.atividade.icone"
-                ></v-text-field>
               </div>
               <div>
                 <v-text-field
@@ -126,7 +120,7 @@ export default {
 
   data: () => ({
     cards: ["Today", "Yesterday"],
-    drawer: true,
+    drawer: false,
     links: [
       ["mdi-pencil", "Registros"],
       ["mdi-chart-bar", "Estatísticas"],
@@ -233,6 +227,12 @@ export default {
       {id: 2, nome: "Universidade", icone: "mdi-school"},
       {id: 3, nome: "Atividade física", icone: "mdi-weight-lifter"},
     ],
+
+    humores: [
+      {id: 0, nome: "Muito feliz", cor: "green", icone: "mdi-emoticon-outline" },
+      {id: 1, nome: "Neutro", cor: "grey", icone: "mdi-emoticon-neutral-outline" },
+      {id: 2, nome: "Triste", cor: "red", icone: "mdi-emoticon-sad-outline" },
+    ],
   }),
 
   methods: {
@@ -267,6 +267,15 @@ export default {
         this.cartoesDiarios.push(cartaoDiarioNovo);
         // talvez precise inserir no inicio do array;
       }
+
+      this.resetarMomento();
+    },
+
+    resetarMomento() {
+      this.formularioMomento.dataHora = '';
+      this.formularioMomento.humor = { nome: '', cor: '', icone: '' };
+      this.formularioMomento.atividade = { nome: '', icone: '' };
+      this.formularioMomento.anotacao = '';
     }
   }
 }

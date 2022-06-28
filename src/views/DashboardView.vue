@@ -42,9 +42,14 @@
                       :value="humor"
                       x-large
                     >
-                      <v-icon x-large>{{ humor.icone }}</v-icon>
+                      <v-icon 
+                        :color="humor.cor"
+                        x-large
+                      >
+                      {{ humor.icone }}
+                      </v-icon>
                     </v-btn>
-                    <div>
+                    <div :class="'text-uppercase font-weight-bold ' + humor.cor + '--text'">
                       {{ humor.nome }}
                     </div>
                   </div>

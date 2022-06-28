@@ -24,72 +24,90 @@
       <v-container>
         <v-row class="justify-content-center" no-gutters>
           <v-card width="600px">
-            <v-form @submit.prevent="registrarMomento">
-              <v-card-text>
-                <label class="font-weight-bold">Selecione um humor:</label>
-                <v-btn-toggle 
-                  v-model="formularioMomento.humor"
-                  class="d-flex justify-content-space-around"
-                > 
-                  <div 
-                    v-for="humor in humores"
-                    :key="humor.id"
-                    class="d-flex flex-direction-column align-items-center"
-                  >
-                    <v-btn
-                      icon
-                      :color="humor.cor"
-                      :value="humor"
-                      x-large
+            <template v-if="deveExibirOsCampos">
+              <v-form @submit.prevent="registrarMomento">
+                <v-card-text>
+                  <label class="font-weight-bold">Selecione um humor:</label>
+                  <v-btn-toggle 
+                    v-model="formularioMomento.humor"
+                    class="d-flex justify-content-space-around"
+                  > 
+                    <div 
+                      v-for="humor in humores"
+                      :key="humor.id"
+                      class="d-flex flex-direction-column align-items-center"
                     >
-                      <v-icon 
+                      <v-btn
+                        icon
                         :color="humor.cor"
+                        :value="humor"
                         x-large
                       >
-                      {{ humor.icone }}
-                      </v-icon>
-                    </v-btn>
-                    <div :class="'text-uppercase font-weight-bold ' + humor.cor + '--text'">
-                      {{ humor.nome }}
+                        <v-icon 
+                          :color="humor.cor"
+                          x-large
+                        >
+                        {{ humor.icone }}
+                        </v-icon>
+                      </v-btn>
+                      <div :class="'text-uppercase font-weight-bold ' + humor.cor + '--text'">
+                        {{ humor.nome }}
+                      </div>
                     </div>
-                  </div>
-                </v-btn-toggle>
+                  </v-btn-toggle>
 
-                <div class="mt-5">
-                  <label class="font-weight-bold">Selecione uma atividade:</label>
-                  <v-chip-group
-                    active-class="primary--text"
-                    column
-                    v-model="formularioMomento.atividade"
-                  >
-                    <v-chip 
-                      v-for="atividade in atividades"
-                      :key="atividade.id"
-                      label
-                      :value="atividade"
+                  <div class="mt-5">
+                    <label class="font-weight-bold">Selecione uma atividade:</label>
+                    <v-chip-group
+                      active-class="primary--text"
+                      column
+                      v-model="formularioMomento.atividade"
                     >
-                      <v-icon left>
-                        {{ atividade.icone }}
-                      </v-icon>
-                      {{ atividade.nome }}
-                    </v-chip>
-                  </v-chip-group>
-                </div>
-                <div class="mt-5">
-                  <v-text-field
-                    label="Nota"
-                    name="anotacao"
-                    v-model="formularioMomento.anotacao"
-                    outlined
-                    dense
-                  ></v-text-field>  
-                </div>
-              </v-card-text>
+                      <v-chip 
+                        v-for="atividade in atividades"
+                        :key="atividade.id"
+                        label
+                        :value="atividade"
+                      >
+                        <v-icon left>
+                          {{ atividade.icone }}
+                        </v-icon>
+                        {{ atividade.nome }}
+                      </v-chip>
+                    </v-chip-group>
+                  </div>
+                  <div class="mt-5">
+                    <v-text-field
+                      label="Nota"
+                      name="anotacao"
+                      v-model="formularioMomento.anotacao"
+                      outlined
+                      dense
+                    ></v-text-field>  
+                  </div>
+                </v-card-text>
 
-              <v-card-actions class="justify-content-end">
-                <v-btn color="primary" depressed type="submit">Adicionar</v-btn>
-              </v-card-actions>
-            </v-form>
+                <v-card-actions class="justify-content-end">
+                  <v-btn @click="cancelarFormulario" color="error" text>Cancelar</v-btn>
+                  <v-btn color="primary" type="submit" text>Adicionar</v-btn>
+                </v-card-actions>
+              </v-form>
+            </template>
+            <template v-else>
+              <v-card-text>
+                <v-btn
+                  @click="deveExibirOsCampos = true"
+                  text
+                >
+                  <v-icon
+                    left
+                  >
+                  mdi-plus
+                  </v-icon>
+                  Adicionar um momento
+                </v-btn>
+              </v-card-text>
+            </template>
           </v-card>
         </v-row>
         <v-row class="justify-content-center" no-gutters>
@@ -244,6 +262,8 @@ export default {
       {id: 1, nome: "Neutro", cor: "grey", icone: "mdi-emoticon-neutral-outline" },
       {id: 2, nome: "Triste", cor: "red", icone: "mdi-emoticon-sad-outline" },
     ],
+
+    deveExibirOsCampos: false,
   }),
 
   methods: {
@@ -280,13 +300,19 @@ export default {
       }
 
       this.resetarMomento();
+      this.deveExibirOsCampos = false;
     },
 
     resetarMomento() {
       this.formularioMomento.dataHora = '';
       this.formularioMomento.humor = { nome: '', cor: '', icone: '' };
       this.formularioMomento.atividade = { nome: '', icone: '' };
-      this.formularioMomento.anotacao = '';
+      this.formularioMomento.anotacao = ''; 
+    },
+
+    cancelarFormulario() {
+      this.resetarMomento();
+      this.deveExibirOsCampos = false;
     }
   }
 }

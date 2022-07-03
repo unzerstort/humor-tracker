@@ -1,7 +1,9 @@
 <template>
-  <div class="content green centralize">
-    <login-card />
-  </div>
+  <v-app>
+    <div class="content green centralize">
+      <login-card />
+    </div>
+  </v-app> 
 </template>
 
 <script>

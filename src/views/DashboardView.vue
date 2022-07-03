@@ -130,6 +130,7 @@
                 >
                   <div>{{ momento.humor.nome }} <small>{{ momento.dataHora }}</small></div>
                   <div>{{ momento.atividade.nome }}</div>
+                  <div>{{ momento.anotacao }}</div>
                 </v-timeline-item>
               </v-timeline>
             </v-card-text>

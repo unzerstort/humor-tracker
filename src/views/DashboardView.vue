@@ -118,7 +118,7 @@
             min-width="400"
           >
             <v-sheet :color="cartao.cor">
-              <v-card-title class="cartao-diario__titulo"> {{ cartao.dataDia }} </v-card-title>
+              <v-card-title class="cartao-diario__titulo"> {{ cartao.dataDia | date }} </v-card-title>
             </v-sheet>
             <v-card-text>
               <v-timeline dense>
@@ -128,7 +128,7 @@
                   :icon="momento.humor.icone" 
                   :color="momento.humor.cor"
                 >
-                  <div>{{ momento.humor.nome }} <small>{{ momento.dataHora }}</small></div>
+                  <div>{{ momento.humor.nome }} <small>{{ momento.dataHora | fullDate }}</small></div>
                   <div>{{ momento.atividade.nome }}</div>
                   <div>{{ momento.anotacao }}</div>
                 </v-timeline-item>
@@ -143,6 +143,7 @@
 
 <script>
 //import CartaoDiario from "@/components/CartaoDiario.vue";
+import moment from 'moment'; 
 
 export default {
   name: "DashboardView",
@@ -315,7 +316,18 @@ export default {
       this.resetarMomento();
       this.deveExibirOsCampos = false;
     }
+  },
+  filters: {
+    fullDate: function (date) {
+      moment.locale('pt-br');
+      return moment(date).format('LLLL');
+  },
+    date: function (date) {
+      moment.locale('pt-br');
+      return moment(date).format('L');
   }
+    }
+  
 }
 </script>
 

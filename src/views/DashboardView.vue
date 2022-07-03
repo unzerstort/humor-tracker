@@ -128,7 +128,7 @@
                   :icon="momento.humor.icone" 
                   :color="momento.humor.cor"
                 >
-                  <div>{{ momento.humor.nome }} <small>{{ momento.dataHora | fullDate }}</small></div>
+                  <div>{{ momento.humor.nome }}<small> — {{ momento.dataHora | fullDate }}</small></div>
                   <div>{{ momento.atividade.nome }}</div>
                   <div>{{ momento.anotacao }}</div>
                 </v-timeline-item>

@@ -196,7 +196,7 @@
             </template>
           </v-card>
         </v-row>
-        <v-row class="justify-content-center" no-gutters>
+        <v-row class="flex-direction-column align-items-center" no-gutters>
           <v-card width="600px" 
             v-for="cartao in cartoesDiarios"
             :key="cartao.id"
@@ -214,7 +214,7 @@
                   :icon="momento.humor.icone" 
                   :color="momento.humor.cor"
                 >
-                  <div>{{ momento.humor.nome }}<small> — {{ momento.dataHora | fullDate }}</small></div>
+                  <div>{{ momento.humor.nome }}<small> — {{ momento.data | fullDate }}</small></div>
                   <div>{{ momento.atividade.nome }}</div>
                   <div>{{ momento.anotacao }}</div>
                 </v-timeline-item>

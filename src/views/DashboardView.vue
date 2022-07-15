@@ -27,64 +27,150 @@
             <template v-if="deveExibirOsCampos">
               <v-form @submit.prevent="registrarMomento">
                 <v-card-text>
-                  <label class="font-weight-bold">Selecione um humor:</label>
-                  <v-btn-toggle 
-                    v-model="formularioMomento.humor"
-                    class="d-flex justify-content-space-around"
-                  > 
-                    <div 
-                      v-for="humor in humores"
-                      :key="humor.id"
-                      class="d-flex flex-direction-column align-items-center"
-                    >
-                      <v-btn
-                        icon
-                        :color="humor.cor"
-                        :value="humor"
-                        x-large
-                      >
-                        <v-icon 
-                          :color="humor.cor"
-                          x-large
+                  <v-row>
+                    <v-col>
+                      <label class="font-weight-bold">Selecione um humor:</label>
+                      <v-btn-toggle 
+                        v-model="formularioMomento.humor"
+                        class="d-flex justify-content-space-around"
+                      > 
+                        <div 
+                          v-for="humor in humores"
+                          :key="humor.id"
+                          class="d-flex flex-direction-column align-items-center"
                         >
-                        {{ humor.icone }}
-                        </v-icon>
-                      </v-btn>
-                      <div :class="'text-uppercase font-weight-bold ' + humor.cor + '--text'">
-                        {{ humor.nome }}
-                      </div>
-                    </div>
-                  </v-btn-toggle>
+                          <v-btn
+                            icon
+                            :color="humor.cor"
+                            :value="humor"
+                            x-large
+                          >
+                            <v-icon 
+                              :color="humor.cor"
+                              x-large
+                            >
+                            {{ humor.icone }}
+                            </v-icon>
+                          </v-btn>
+                          <div :class="'text-uppercase font-weight-bold ' + humor.cor + '--text'">
+                            {{ humor.nome }}
+                          </div>
+                        </div>
+                      </v-btn-toggle>
+                    </v-col>
+                  </v-row>
 
-                  <div class="mt-5">
-                    <label class="font-weight-bold">Selecione uma atividade:</label>
-                    <v-chip-group
-                      active-class="primary--text"
-                      column
-                      v-model="formularioMomento.atividade"
-                    >
-                      <v-chip 
-                        v-for="atividade in atividades"
-                        :key="atividade.id"
-                        label
-                        :value="atividade"
+                  <v-row>
+                    <v-col>
+                      <label class="font-weight-bold">Selecione uma atividade:</label>
+                      <v-chip-group
+                        active-class="primary--text"
+                        column
+                        v-model="formularioMomento.atividade"
                       >
-                        <v-icon left>
-                          {{ atividade.icone }}
-                        </v-icon>
-                        {{ atividade.nome }}
-                      </v-chip>
-                    </v-chip-group>
-                  </div>
-                  <div class="mt-5">
-                    <v-text-field
-                      label="Nota"
-                      name="anotacao"
-                      v-model="formularioMomento.anotacao"
-                      outlined
-                      dense
-                    ></v-text-field>  
-                  </div>
+                        <v-chip 
+                          v-for="atividade in atividades"
+                          :key="atividade.id"
+                          label
+                          :value="atividade"
+                        >
+                          <v-icon left>
+                            {{ atividade.icone }}
+                          </v-icon>
+                          {{ atividade.nome }}
+                        </v-chip>
+                      </v-chip-group>
+                    </v-col>
+                  </v-row>
+
+                  <v-row>
+                    <v-col cols="6">
+                      <v-menu
+                        ref="menu"
+                        v-model="menu"
+                        :close-on-content-click="false"
+                        :return-value.sync="formularioMomento.dataDia"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="auto"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="formularioMomento.dataDia"
+                            label="Selecione uma data"
+                            prepend-icon="mdi-calendar"
+                            readonly
+                            v-bind="attrs"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          v-model="formularioMomento.dataDia"
+                          no-title
+                          scrollable
+                        >
+                          <v-spacer></v-spacer>
+                          <v-btn
+                            text
+                            color="primary"
+                            @click="menu = false"
+                          >
+                            Cancel
+                          </v-btn>
+                          <v-btn
+                            text
+                            color="primary"
+                            @click="$refs.menu.save(formularioMomento.dataDia)"
+                          >
+                            OK
+                          </v-btn>
+                        </v-date-picker>
+                      </v-menu>
+                    </v-col>
+                    <v-col cols="6">
+                      <v-menu
+                        ref="menuHora"
+                        v-model="menu2"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        :return-value.sync="formularioMomento.dataHora"
+                        transition="scale-transition"
+                        offset-y
+                        max-width="290px"
+                        min-width="290px"
+                      >
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-text-field
+                            v-model="formularioMomento.dataHora"
+                            label="Picker in menu"
+                            prepend-icon="mdi-clock-time-four-outline"
+                            readonly
+                            v-bind="attrs"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-time-picker
+                          v-if="menu2"
+                          v-model="formularioMomento.dataHora"
+                          full-width
+                          format="24hr"
+                          @click:minute="$refs.menuHora.save(formularioMomento.dataHora)"
+                        ></v-time-picker>
+                      </v-menu>
+                    </v-col>
+                  </v-row>
+
+                  <v-row>
+                    <v-col>
+                      <v-text-field
+                        label="Nota"
+                        name="anotacao"
+                        v-model="formularioMomento.anotacao"
+                        outlined
+                        dense
+                      ></v-text-field>  
+                    </v-col>
+                  </v-row>
                 </v-card-text>
 
                 <v-card-actions class="justify-content-end">
@@ -158,88 +244,12 @@ export default {
       ["mdi-exit-to-app", "Sair"],
     ],
 
-    cartoesDiarios: [
-      // {
-      //   id: 0,
-      //   dataDia: new Date(),
-      //   cor: 'green',
-      //   momentos: [
-      //     {
-      //       id: 1,
-      //       humor: {
-      //         icone: 'mdi-emoticon',
-      //         nome: 'feliz',
-      //         cor: 'green'
-      //       },
-      //       dataHora: new Date(),
-      //       atividade: {
-      //         icone: 'mdi-briefcase',
-      //         nome: 'trabalho'
-      //       },
-      //       anotacao: 'balblablalalala'
-      //     },
-      //     {
-      //       id: 2,
-      //       humor: {
-      //         icone: 'mdi-emoticon',
-      //         nome: 'feliz',
-      //         cor: 'green'
-      //       },
-      //       dataHora: new Date(),
-      //       atividade: {
-      //         icone: '',
-      //         nome: ''
-      //       },
-      //       anotacao: 'blululu'
-      //     },
-      //   ]
-      // },
-      // {
-      //   id: 3,
-      //   dataDia: new Date(),
-      //   cor: 'red',
-      //   momentos: [
-      //     {
-      //       id: 4,
-      //       humor: {
-      //         icone: 'mdi-emoticon-sad',
-      //         nome: 'triste',
-      //         cor: 'red'
-      //       },
-      //       dataHora: new Date(),
-      //       atividade: {
-      //         icone: 'mdi-briefcase',
-      //         nome: 'trabalho'
-      //       },
-      //       anotacao: 'balblablalalala'
-      //     }
-      //   ]
-      // },
-      // {
-      //   id: 5,
-      //   dataDia: new Date(),
-      //   cor: 'grey',
-      //   momentos: [
-      //     {
-      //       id: 6,
-      //       humor: {
-      //         icone: 'mdi-emoticon-neutral',
-      //         nome: 'neutro',
-      //         cor: 'grey'
-      //       },
-      //       dataHora: new Date(),
-      //       atividade: {
-      //         icone: 'mdi-briefcase',
-      //         nome: 'trabalho'
-      //       },
-      //       anotacao: 'balblablalalala'
-      //     }
-      //   ]
-      // }
-    ],
+    cartoesDiarios: [],
 
     formularioMomento: {
+      dataDia: '',
       dataHora: '',
+      data: '',
       humor: {
         nome:'',
         cor: '',
@@ -266,34 +276,38 @@ export default {
     ],
 
     deveExibirOsCampos: false,
+    time: null,
+    menu2: false,
   }),
 
   methods: {
     registrarMomento() {
       console.log(this.formularioMomento);
-      this.formularioMomento.dataHora = new Date();
+      this.formularioMomento.data = new Date(this.formularioMomento.dataDia + 'T' + this.formularioMomento.dataHora);
 
       const cartaoDiarioCorrespondente = this.cartoesDiarios.find(cartao => {
-        return this.formularioMomento.dataHora.getFullYear() == cartao.dataDia.getFullYear()
-          && this.formularioMomento.dataHora.getMonth() == cartao.dataDia.getMonth()
-          && this.formularioMomento.dataHora.getDate() == cartao.dataDia.getDate()
+        return this.formularioMomento.data.getFullYear() == cartao.dataDia.getFullYear()
+          && this.formularioMomento.data.getMonth() == cartao.dataDia.getMonth()
+          && this.formularioMomento.data.getDate() == cartao.dataDia.getDate()
       })
 
       if (cartaoDiarioCorrespondente) {
         cartaoDiarioCorrespondente.momentos.push({
-          ...this.formularioMomento,
+          data: this.formularioMomento.data,
           humor: {...this.formularioMomento.humor},
           atividade: {...this.formularioMomento.atividade},
+          anotacao: this.formularioMomento.anotacao,
         });
       }
       else {
         const cartaoDiarioNovo = {
-          dataDia: this.formularioMomento.dataHora,
+          dataDia: this.formularioMomento.data,
           cor: 'green', // calcular valor
           momentos: [{
-            ...this.formularioMomento,
+            data: this.formularioMomento.data,
             humor: {...this.formularioMomento.humor},
             atividade: {...this.formularioMomento.atividade},
+            anotacao: this.formularioMomento.anotacao,
           }]
         };
 
@@ -306,7 +320,9 @@ export default {
     },
 
     resetarMomento() {
+      this.formularioMomento.dataDia = '';
       this.formularioMomento.dataHora = '';
+      this.formularioMomento.data = null;
       this.formularioMomento.humor = { nome: '', cor: '', icone: '' };
       this.formularioMomento.atividade = { nome: '', icone: '' };
       this.formularioMomento.anotacao = ''; 

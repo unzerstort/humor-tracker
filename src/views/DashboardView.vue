@@ -87,7 +87,7 @@
                     <v-col cols="6">
                       <v-menu
                         ref="menu"
-                        v-model="menu"
+                        v-model="formularioMomento.menuDataDia"
                         :close-on-content-click="false"
                         :return-value.sync="formularioMomento.dataDia"
                         transition="scale-transition"
@@ -113,7 +113,7 @@
                           <v-btn
                             text
                             color="primary"
-                            @click="menu = false"
+                            @click="formularioMomento.menuDataDia = false"
                           >
                             Cancel
                           </v-btn>
@@ -130,7 +130,7 @@
                     <v-col cols="6">
                       <v-menu
                         ref="menuHora"
-                        v-model="menu2"
+                        v-model="formularioMomento.menuDataHora"
                         :close-on-content-click="false"
                         :nudge-right="40"
                         :return-value.sync="formularioMomento.dataHora"
@@ -150,7 +150,7 @@
                           ></v-text-field>
                         </template>
                         <v-time-picker
-                          v-if="menu2"
+                          v-if="formularioMomento.menuDataHora"
                           v-model="formularioMomento.dataHora"
                           full-width
                           format="24hr"
@@ -283,8 +283,13 @@ export default {
 
     formularioMomento: {
       dataDia: '',
+      menuDataDia: false,
+
       dataHora: '',
+      menuDataHora: false,
+
       data: '',
+
       humor: {
         nome:'',
         cor: '',
@@ -312,12 +317,10 @@ export default {
 
     deveExibirOsCampos: false,
     time: null,
-    menu2: false,
   }),
 
   methods: {
     registrarMomento() {
-      console.log(this.formularioMomento);
       this.formularioMomento.data = new Date(this.formularioMomento.dataDia + 'T' + this.formularioMomento.dataHora);
 
       const cartaoDiarioCorrespondente = this.cartoesDiarios.find(cartao => {
@@ -357,7 +360,9 @@ export default {
 
     resetarMomento() {
       this.formularioMomento.dataDia = '';
+      this.formularioMomento.menuDataDia = false;
       this.formularioMomento.dataHora = '';
+      this.formularioMomento.menuDataHora = false;
       this.formularioMomento.data = null;
       this.formularioMomento.humor = { nome: '', cor: '', icone: '' };
       this.formularioMomento.atividade = { nome: '', icone: '' };

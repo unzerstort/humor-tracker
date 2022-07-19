@@ -25,7 +25,7 @@
         <v-row class="justify-content-center" no-gutters>
           <v-card width="600px">
             <template v-if="deveExibirOsCampos">
-              <v-form @submit.prevent="registrarMomento">
+              <v-form @submit.prevent="submeterFormularioMomento">
                 <v-card-text>
                   <v-row>
                     <v-col>
@@ -175,7 +175,7 @@
 
                 <v-card-actions class="justify-content-end">
                   <v-btn @click="cancelarFormulario" color="error" text>Cancelar</v-btn>
-                  <v-btn color="primary" type="submit" text>Adicionar</v-btn>
+                  <v-btn color="primary" type="submit" text>Salvar</v-btn>
                 </v-card-actions>
               </v-form>
             </template>
@@ -232,8 +232,8 @@
                       </template>
 
                       <v-list>
-                        <v-list-item>
-                          <v-list-item-title @click="editarMomento">Editar</v-list-item-title>
+                        <v-list-item @click="abrirFormularioParaEdicao(momento)">
+                          <v-list-item-title>Editar</v-list-item-title>
                         </v-list-item>
                         <v-list-item @click="excluirMomento(momento, momentoIndex, cartao, cartaoIndex)">
                           <v-list-item-title>Excluir</v-list-item-title>
@@ -283,10 +283,10 @@ export default {
 
     formularioMomento: {
       dataDia: '',
-      menuDataDia: false,
+      menuDataDia: false, // controla a exibição do calendário
 
       dataHora: '',
-      menuDataHora: false,
+      menuDataHora: false, // controla a exibição do relógio
 
       data: '',
 
@@ -317,6 +317,8 @@ export default {
 
     deveExibirOsCampos: false,
     time: null,
+    estaEditando: false,
+    momentoASerEditado: null,
   }),
 
   methods: {
@@ -354,11 +356,31 @@ export default {
         // talvez precise inserir no inicio do array;
       }
 
-      this.resetarMomento();
+      this.resetarFormularioMomento();
       this.deveExibirOsCampos = false;
     },
 
-    resetarMomento() {
+    editarMomento() {
+      this.momentoASerEditado.humor = this.formularioMomento.humor;
+      this.momentoASerEditado.atividade = this.formularioMomento.atividade;
+      this.momentoASerEditado.data = new Date(this.formularioMomento.dataDia + 'T' + this.formularioMomento.dataHora);
+      this.momentoASerEditado.anotacao = this.formularioMomento.anotacao;
+
+      this.deveExibirOsCampos = false;
+      this.estaEditando = false;
+      this.momentoASerEditado = null;
+      this.resetarFormularioMomento();
+    },
+
+    excluirMomento(momento, momentoIndex, cartaoDiario, cartaoIndex) {
+      cartaoDiario.momentos.splice(momentoIndex, 1);
+
+      if (cartaoDiario.momentos.length == 0) {
+        this.cartoesDiarios.splice(cartaoIndex, 1);
+      }
+    },
+
+    resetarFormularioMomento() {
       this.formularioMomento.dataDia = '';
       this.formularioMomento.menuDataDia = false;
       this.formularioMomento.dataHora = '';
@@ -370,20 +392,37 @@ export default {
     },
 
     cancelarFormulario() {
-      this.resetarMomento();
+      this.resetarFormularioMomento();
       this.deveExibirOsCampos = false;
     },
 
-    excluirMomento(momento, momentoIndex, cartaoDiario, cartaoIndex) {
-      cartaoDiario.momentos.splice(momentoIndex, 1);
+    abrirFormularioParaEdicao(momento){
+      this.estaEditando = true;
+      this.deveExibirOsCampos = true;
+      this.momentoASerEditado = momento;
 
-      if (cartaoDiario.momentos.length == 0) {
-        this.cartoesDiarios.splice(cartaoIndex, 1);
-      }
+      this.preencherFormularioMomento(momento);
     },
 
-    editarMomento() {
+    preencherFormularioMomento(momento) {      
+      this.formularioMomento.humor = momento.humor;
+      this.formularioMomento.atividade = momento.atividade;
+      this.formularioMomento.anotacao = momento.anotacao;
 
+      const data = moment(momento.data).format().split("T");
+
+      this.formularioMomento.dataDia = data[0];
+      this.formularioMomento.menuDataDia = false;
+      this.formularioMomento.dataHora = data[1].slice(0,5);
+      this.formularioMomento.menuDataHora = false;
+    },
+
+    submeterFormularioMomento() {
+      if (this.estaEditando) {
+        this.editarMomento();
+      } else {
+        this.registrarMomento();
+      }
     }
 
   },

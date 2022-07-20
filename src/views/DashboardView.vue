@@ -85,48 +85,31 @@
 
                   <v-row>
                     <v-col cols="6">
-                      <v-menu
-                        ref="menu"
-                        v-model="formularioMomento.menuDataDia"
-                        :close-on-content-click="false"
-                        :return-value.sync="formularioMomento.dataDia"
-                        transition="scale-transition"
-                        offset-y
-                        min-width="auto"
-                      >
-                        <template v-slot:activator="{ on, attrs }">
-                          <v-text-field
-                            v-model="formularioMomento.dataDia"
-                            label="Selecione uma data"
-                            prepend-icon="mdi-calendar"
-                            readonly
-                            v-bind="attrs"
-                            v-on="on"
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker
+                    <v-menu
+                      v-model="formularioMomento.menuDataDia"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="auto"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
                           v-model="formularioMomento.dataDia"
-                          no-title
-                          scrollable
-                        >
-                          <v-spacer></v-spacer>
-                          <v-btn
-                            text
-                            color="primary"
-                            @click="formularioMomento.menuDataDia = false"
-                          >
-                            Cancel
-                          </v-btn>
-                          <v-btn
-                            text
-                            color="primary"
-                            @click="$refs.menu.save(formularioMomento.dataDia)"
-                          >
-                            OK
-                          </v-btn>
-                        </v-date-picker>
-                      </v-menu>
-                    </v-col>
+                          label="Selecione uma data"
+                          prepend-icon="mdi-calendar"
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                        ></v-text-field>
+                      
+                      </template>
+                      <v-date-picker 
+                        v-model="formularioMomento.dataDia"
+                        @input="formularioMomento.menuDataDia = false"
+                      ></v-date-picker>
+                    </v-menu>
+                  </v-col>
                     <v-col cols="6">
                       <v-menu
                         ref="menuHora"
@@ -320,7 +303,6 @@ export default {
     estaEditando: false,
     momentoASerEditado: null,
   }),
-
   methods: {
     registrarMomento() {
       this.formularioMomento.data = new Date(this.formularioMomento.dataDia + 'T' + this.formularioMomento.dataHora);

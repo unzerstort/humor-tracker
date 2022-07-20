@@ -106,6 +106,7 @@
                       </template>
                       <v-date-picker 
                         v-model="formularioMomento.dataDia"
+                        color="blue accent-2"
                         @input="formularioMomento.menuDataDia = false"
                       ></v-date-picker>
                     </v-menu>
@@ -125,7 +126,7 @@
                         <template v-slot:activator="{ on, attrs }">
                           <v-text-field
                             v-model="formularioMomento.dataHora"
-                            label="Picker in menu"
+                            label="Selecione um horário"
                             prepend-icon="mdi-clock-time-four-outline"
                             readonly
                             v-bind="attrs"
@@ -137,6 +138,7 @@
                           v-model="formularioMomento.dataHora"
                           full-width
                           format="24hr"
+                          color="blue accent-2"
                           @click:minute="$refs.menuHora.save(formularioMomento.dataHora)"
                         ></v-time-picker>
                       </v-menu>

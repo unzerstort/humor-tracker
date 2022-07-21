@@ -183,7 +183,7 @@
         </v-row>
         <v-row class="flex-direction-column align-items-center" no-gutters>
           <v-card width="600px" 
-            v-for="(cartao, cartaoIndex) in cartoesDiarios"
+            v-for="(cartao, cartaoIndex) in cartoesDiariosOrdenados"
             :key="cartao.id"
             class="cartao-diario mt-3" 
             min-width="400"
@@ -305,6 +305,24 @@ export default {
     estaEditando: false,
     momentoASerEditado: null,
   }),
+
+  computed: {
+    cartoesDiariosOrdenados() {
+      const cartoesDiariosOrdenados = [ ...this.cartoesDiarios ];
+      cartoesDiariosOrdenados.sort((c1, c2) => c2.dataDia - c1.dataDia);
+      return cartoesDiariosOrdenados;
+    },
+    totalMomentosInseridos() {
+      let totalMomentosInseridos = 0;
+
+      this.cartoesDiarios.forEach((cartao) => {
+        totalMomentosInseridos += cartao.momentos.length;
+      });
+
+      return totalMomentosInseridos;
+    }
+  },
+
   methods: {
     registrarMomento() {
       this.formularioMomento.data = new Date(this.formularioMomento.dataDia + 'T' + this.formularioMomento.dataHora);
